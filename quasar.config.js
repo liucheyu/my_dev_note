@@ -107,6 +107,7 @@ module.exports = configure(function (/* ctx */) {
           }
         });
 
+        child_process.exec('cd ./dist/web');
         child_process.exec('git add .');
         child_process.exec('git commit -m "update"');
         child_process.exec('git push');
