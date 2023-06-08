@@ -11,6 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const yaml = require('yaml');
+const child_process = require('child_process');
 
 const { configure } = require('quasar/wrappers');
 
@@ -64,7 +65,7 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      // publicPath: '/',
+      publicPath: process.env.NODE_ENV == 'production' ? 'my_note' : '',
       // analyze: true,
       // env: {},
       // rawDefine: {}
@@ -79,16 +80,36 @@ module.exports = configure(function (/* ctx */) {
       // vitePlugins: [
       //   [ 'package-name', { ..options.. } ]
       // ]
-      async beforeDev({ quasarConf }) {
-        //let pages = path.join(__dirname, 'src', 'assets', 'md');
-        //const file = fs.readFileSync(path.join(__dirname, 'src', 'assets', 'md', 'main.yaml'), 'utf8')
-        //console.log(yaml.parse(file))
-        // readDirRecursive(pages).then((mainTree) => {
-        //   console.log(mainTree);
-        // });
+      beforeDev({ quasarConf }) {
+        child_process.exec('python3 build.py', (error, stdout, stderr) => {
+          if (error) {
+            console.error(`error: ${error}`);
+            return;
+          }
+          console.log(`stdout: ${stdout}`);
+          console.error(`stderr: ${stderr}`);
+        });
       },
       beforeBuild({ quasarConf }) {
-        //console.log('Current directory:', __dirname);
+        child_process.exec('python3 build.py', (error, stdout, stderr) => {
+          if (error) {
+            console.error(`error: ${error}`);
+            return;
+          }
+          console.log(`stdout: ${stdout}`);
+          console.error(`stderr: ${stderr}`);
+        });
+      },
+      afterBuild() {
+        fs.cp('./dist/spa', './dist/web', { recursive: true }, (err) => {
+          if (err) {
+            console.error(err);
+          }
+        });
+
+        child_process.exec('git add .');
+        child_process.exec('git commit -m "update"');
+        child_process.exec('git push');
       },
     },
 

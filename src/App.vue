@@ -7,7 +7,7 @@ import { useMdPathStore } from 'stores/mdPath';
 const MdPath = useMdPathStore();
 const { updateMdPath } = MdPath;
 
-fetch('/mdFiles.json')
+fetch('./mdFiles.json')
   .then((res) => {
     return res.json();
   })

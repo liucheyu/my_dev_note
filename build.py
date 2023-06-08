@@ -70,3 +70,5 @@ mainData=loadMain("./public/md")
 
 with open("./public/mdFiles.json", "w+", encoding='utf8') as mdF:
   json.dump(mainData, mdF, ensure_ascii=False)
+
+print("build mdFiles end")

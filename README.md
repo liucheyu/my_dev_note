@@ -8,6 +8,8 @@ This is my note
 - 只有加md檔或md檔的目錄，只需執行python3 `build.py`，然後上傳
 - 要放md檔的子目錄，都需要建立main.yaml，格式請參照下方敘述
 
+撰寫目錄時，使用yaml，build給網站用的階層資料則用json，
+這樣做的原因是，在開發時，yaml可讀性較高，而給網站讀時，json則是比較通用。
 
 ## main.yaml 格式:
 
@@ -26,6 +28,8 @@ mds:
 nodes:
   - name:
 ```
+
+
 
 ## 需裝的python 套件
 ```
